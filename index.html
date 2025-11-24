@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="jspsych.js"></script>
+  <script src="plugin-image-keyboard-response.js"></script>
+</head>
+
+<body>
+
+<script>
+
+var timeline = [];
+
+timeline.push({
+  type: jsPsychImageKeyboardResponse,
+  stimulus: "story1.png",
+  choices: [' '],
+  stimulus_height: window.innerHeight,
+  maintain_aspect_ratio: true,
+  prompt: "<p>続けるにはスペースキーを押してください</p>"
+});
+
+timeline.push({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: "<p>次に進みます</p>",
+  choices: [' '],
+  on_finish: function(){
+    window.location.href = 
+      "https://xxxx.qualtrics.com/jfe/form/SV_xxxxxx?pid=" + jsPsych.randomization.randomID(8);
+  }
+});
+
+jsPsych.init({
+  timeline: timeline,
+  fullscreen: true
+});
+
+</script>
+
+</body>
+</html>
