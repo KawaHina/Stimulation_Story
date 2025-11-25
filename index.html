@@ -1,42 +1,188 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <script src="jspsych.js"></script>
-  <script src="plugin-image-keyboard-response.js"></script>
+  <meta charset="utf-8" />
+  <title>Story Experiment</title>
+
+  <!-- jsPsych 7 読み込み -->
+  <script src="https://unpkg.com/jspsych@7.3.0/dist/jspsych.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.0/dist/plugins/jspsych-html-keyboard-response.js"></script>
+  <link href="https://unpkg.com/jspsych@7.3.0/dist/jspsych.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: #fff;
+    }
+    img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 95vh;
+    }
+  </style>
 </head>
 
-<body>
+<body></body>
 
 <script>
 
-var timeline = [];
+// *************************************************
+// ① 刺激画像の URL
+// *************************************************
+var images = [
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_c6oNrXKoZQCo9Fn",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_xBOJogSIZm7OMtJ",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_X0b91aXJCjR3jFx",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_LRd46iyVnOoKIt4",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_Y2kaPLtWgfwyMdS",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_rMLm2fjTWAGFZAI",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_HDV9SnajACNdVDk",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_Z61YqfAseZxqKXT",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_8pavRptjZcAjKBL",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_1B194FENQUQ0niA",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_QK02fh9THF0vHFj",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_toCryVJUWyGAoYw",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_xuJfnlTf9nRKCPM",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_5bI1vpid0a785WX",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_MsYaft1yCeBpLbq",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_4Zzs5tyKA0LmDxB",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_W3BQrOzVt8cZ5M4",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_YRDjFwxrIwr2z6u",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_TrPhpdLdwRGYSwS",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_uzhGR3WPZAJExdf",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_WcF3AL0hkvNK42D",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_yiQhJ42fISisaQL",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2kv6t7xGC1SgEXW",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_269a4reDjB5fXoz",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_IDkLDMVIglNY7PW",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_Y3Sp0g0gLxu8yyt",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_2LX3McH4T2Zdf4G",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_GUwnX8nOva3c1gj",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6S4qpfpSiJZivk8",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_WwLZaXJcNHI5FTQ",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_TYKqTdzMhc0VTQ3",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_g9NHtL8V39kyYgZ",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_tLQnjauCzaTI5Uy",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_9xSfeCMdq55PYRB",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_hlnkRdBQc0k86uB",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_FnkGgZK7zPuZs8i",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_s7iUiZMEqnZnBKl",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_6Dr6Z7CCADKButg",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_7IMQm4MN93VcZ9G",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_llx4dNSgiRjNFch",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_MFhjoAoxh7Ns5PH",
+  "https://gakugeiedupsychol.au1.qualtrics.com/ControlPanel/Graphic.php?IM=IM_kkRbNT9OaQrYIbs"
+];
 
-timeline.push({
-  type: jsPsychImageKeyboardResponse,
-  stimulus: "story1.png",
-  choices: [' '],
-  stimulus_height: window.innerHeight,
-  maintain_aspect_ratio: true,
-  prompt: "<p>続けるにはスペースキーを押してください</p>"
-});
-
-timeline.push({
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<p>次に進みます</p>",
-  choices: [' '],
+// *************************************************
+// ② jsPsych 初期化
+// *************************************************
+var jsPsych = initJsPsych({
   on_finish: function(){
-    window.location.href = 
-      "https://xxxx.qualtrics.com/jfe/form/SV_xxxxxx?pid=" + jsPsych.randomization.randomID(8);
+    // Qualtrics にデータ返す（iframe 経由）
+    var json = jsPsych.data.get().json();
+    window.parent.postMessage(json, "*");
   }
 });
 
-jsPsych.init({
-  timeline: timeline,
-  fullscreen: true
+// *************************************************
+// ③ 画像を表示する trial を関数化
+// *************************************************
+
+function make_trial(img_url){
+  return {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+      <div class="center">
+        <img src="${img_url}">
+      </div>
+      <p style="text-align:center; font-size:20px;">（→：次へ / ←：戻る）</p>
+    `,
+    choices: ["arrowright", "arrowleft"],
+    on_finish: function(data){
+      data.stimulus_image = img_url;
+    }
+  };
+}
+
+// *************************************************
+// ④ タイムライン構築（前後移動可能）
+// *************************************************
+
+var timeline = [];
+
+var current_index = 0;
+
+timeline.push({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div class="center">
+      <p style="font-size:24px;">スペースキーで開始</p>
+    </div>
+  `,
+  choices: [" "]
 });
+
+// ★ 画像の「前後移動」を制御する独自ループ
+timeline.push({
+  timeline: [{
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function(){
+      return `
+        <div class="center">
+          <img src="${images[current_index]}">
+        </div>
+        <p style="text-align:center; font-size:20px;">（→：次へ / ←：戻る）</p>
+      `;
+    },
+    choices: ["arrowright", "arrowleft"],
+    on_finish: function(data){
+      var key = data.response;
+
+      if(key === "arrowright"){
+        current_index++;
+        if(current_index >= images.length){
+          jsPsych.endCurrentTimeline();
+        }
+      } else if(key === "arrowleft"){
+        current_index--;
+        if(current_index < 0){ current_index = 0; }
+      }
+
+      data.stimulus_image = images[current_index];
+    }
+  }],
+  loop_function: function(){
+    return (current_index < images.length);
+  }
+});
+
+// *************************************************
+// ⑤ 実験終了画面
+// *************************************************
+
+timeline.push({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div class="center">
+      <p style="font-size:24px;">終了しました。</p>
+      <p>画面が自動で次へ移ります。</p>
+    </div>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: 1500
+});
+
+// *************************************************
+// 実験開始
+// *************************************************
+jsPsych.run(timeline);
 
 </script>
 
-</body>
 </html>
